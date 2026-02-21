@@ -38,7 +38,12 @@ app.post("/shorten", async (req, res) => {
 
     const shortId = nanoid(6);
     await Url.create({ originalUrl, shortId });
-    res.json({ shortUrl: `http://localhost:8000/${shortId}` });
+
+    
+    const host = req.headers.host; 
+    const protocol = req.headers["x-forwarded-proto"] || "https"; 
+
+    res.json({ shortUrl: `${protocol}://${host}/${shortId}` });
   } catch (error) {
     res.status(500).json({ error: "Server error" });
   }
