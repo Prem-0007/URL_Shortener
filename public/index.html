@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>URL Shortener</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+
+<style>
+  /* Base styles */
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #e8e8e8;
+    transition: 0.3s;
+    text-align: center;
+  }
+
+  .heading {
+    margin-top: 30px;
+    font-weight: 800;
+    color: #333;
+  }
+
+  .container {
+    width: 85%;
+    max-width: 600px;
+    margin: auto;
+    margin-top: 40px;
+    position: relative;
+  }
+
+  .search-box {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .search-box input {
+    padding: 12px;
+    width: 250px;
+    max-width: 100%;
+    border: none;
+    border-radius: 20px;
+    background: #e8e8e8;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+    outline: none;
+  }
+
+  .search-box button {
+    padding: 12px 18px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background: #e8e8e8;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+    transition: 0.2s;
+  }
+
+  .search-box button:hover {
+    box-shadow: inset 6px 6px 12px #c5c5c5, inset -6px -6px 12px #ffffff;
+  }
+
+  .result-card {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    background: #e8e8e8;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+    font-weight: 600;
+    word-break: break-word;
+  }
+
+  .result-card a {
+    text-decoration: none;
+    color: #333;
+  }
+
+  .dark-toggle {
+    position: absolute;
+    right: 0;
+    top: -50px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    background: #e8e8e8;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+    transition: 0.3s;
+  }
+
+  /* Dark mode */
+  body.dark {
+    background: #1a1c2c;
+    color: white;
+  }
+
+  body.dark .search-box input,
+  body.dark .search-box button,
+  body.dark .result-card,
+  body.dark .dark-toggle {
+    background: #1a1c2c;
+    color: white;
+    box-shadow: 6px 6px 12px #11121d, -6px -6px 12px #24263d;
+  }
+
+  body.dark .result-card a {
+    color: #00ffff;
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .heading { font-size: 1.5rem; }
+    .search-box input, .search-box button { width: 100%; }
+    .dark-toggle { top: -35px; padding: 6px 12px; }
+  }
+</style>
+</head>
+<body>
+
+<h1 class="heading">URL Shortener</h1>
+
+<div class="container">
+  <button class="dark-toggle" onclick="toggleDark()">🌙</button>
+
+  <div class="search-box">
+    <input type="text" id="urlInput" placeholder="Enter URL" />
+    <button onclick="shortenUrl()">Shorten</button>
+  </div>
+
+  <div id="result"></div>
+</div>
+
+<script>
+  function toggleDark() {
+    document.body.classList.toggle("dark");
+  }
+
+  async function shortenUrl() {
+    const originalUrl = document.getElementById("urlInput").value;
+    if(!originalUrl) return alert("Enter a URL!");
+
+    const response = await fetch("/shorten", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ originalUrl })
+    });
+
+    const data = await response.json();
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = `
+      <div class="result-card">
+        <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>
+      </div>
+    `;
+  }
+</script>
+
+</body>
+</html>
