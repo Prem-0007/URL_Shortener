@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-  
   body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -79,6 +77,21 @@
     color: #333;
   }
 
+  .result-card button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    background: #e8e8e8;
+    box-shadow: 4px 4px 8px #c5c5c5, -4px -4px 8px #ffffff;
+    transition: 0.2s;
+  }
+
+  .result-card button:hover {
+    box-shadow: inset 4px 4px 8px #c5c5c5, inset -4px -4px 8px #ffffff;
+  }
+
   .dark-toggle {
     position: absolute;
     right: 0;
@@ -92,7 +105,6 @@
     transition: 0.3s;
   }
 
-  
   body.dark {
     background: #1a1c2c;
     color: white;
@@ -101,6 +113,7 @@
   body.dark .search-box input,
   body.dark .search-box button,
   body.dark .result-card,
+  body.dark .result-card button,
   body.dark .dark-toggle {
     background: #1a1c2c;
     color: white;
@@ -110,7 +123,6 @@
   body.dark .result-card a {
     color: #00ffff;
   }
-
 
   @media (max-width: 480px) {
     .heading { font-size: 1.5rem; }
@@ -135,6 +147,10 @@
 </div>
 
 <script>
+function toggleDark() {
+  document.body.classList.toggle("dark");
+}
+
 async function shortenUrl() {
   const originalUrl = document.getElementById("urlInput").value;
   const resultDiv = document.getElementById("result");
@@ -158,12 +174,20 @@ async function shortenUrl() {
 
     resultDiv.innerHTML = `
       <div class="result-card">
-        <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>
+        Original: ${originalUrl}<br>
+        Short: <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a><br>
+        <button onclick="copyToClipboard('${data.shortUrl}')">Copy</button>
       </div>
     `;
   } catch (err) {
     resultDiv.innerHTML = `<div class="result-card error">${err.message}</div>`;
   }
+}
+
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    alert("Copied: " + text);
+  });
 }
 </script>
 </body>
