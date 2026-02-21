@@ -36,7 +36,7 @@ app.post("/shorten", async (req, res) => {
     const { originalUrl } = req.body;
     if (!originalUrl) return res.status(400).json({ message: "URL required" });
 
-    const shortId = nanoid(6);
+    const shortId = nanoid(4);
     await Url.create({ originalUrl, shortId });
 
     
