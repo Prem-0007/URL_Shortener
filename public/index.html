@@ -64,21 +64,35 @@
 
   .result-card {
     margin-top: 20px;
-    padding: 20px;
+    padding: 15px 20px;
     border-radius: 20px;
     background: #e8e8e8;
     box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
     font-weight: 600;
     word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
-  .result-card a {
+  .short-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #e8e8e8;
+    box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+    padding: 10px 16px;
+    border-radius: 20px;
+  }
+
+  .short-link {
     text-decoration: none;
+    font-weight: 600;
     color: #333;
+    word-break: break-all;
   }
 
-  .result-card button {
-    margin-top: 10px;
+  .short-card button {
     padding: 6px 12px;
     border: none;
     border-radius: 20px;
@@ -88,7 +102,7 @@
     transition: 0.2s;
   }
 
-  .result-card button:hover {
+  .short-card button:hover {
     box-shadow: inset 4px 4px 8px #c5c5c5, inset -4px -4px 8px #ffffff;
   }
 
@@ -113,20 +127,23 @@
   body.dark .search-box input,
   body.dark .search-box button,
   body.dark .result-card,
-  body.dark .result-card button,
+  body.dark .short-card,
+  body.dark .short-card button,
   body.dark .dark-toggle {
     background: #1a1c2c;
     color: white;
     box-shadow: 6px 6px 12px #11121d, -6px -6px 12px #24263d;
   }
 
-  body.dark .result-card a {
+  body.dark .short-link {
     color: #00ffff;
   }
 
   @media (max-width: 480px) {
     .heading { font-size: 1.5rem; }
     .search-box input, .search-box button { width: 100%; }
+    .short-card { flex-direction: column; gap: 10px; align-items: flex-start; }
+    .short-card button { width: 100%; }
     .dark-toggle { top: -35px; padding: 6px 12px; }
   }
 </style>
@@ -174,9 +191,11 @@ async function shortenUrl() {
 
     resultDiv.innerHTML = `
       <div class="result-card">
-        Original: ${originalUrl}<br>
-        Short: <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a><br>
-        <button onclick="copyToClipboard('${data.shortUrl}')">Copy</button>
+        <div>Original: ${originalUrl}</div>
+        <div class="short-card">
+          <a href="${data.shortUrl}" target="_blank" class="short-link">${data.shortUrl}</a>
+          <button onclick="copyToClipboard('${data.shortUrl}')">Copy</button>
+        </div>
       </div>
     `;
   } catch (err) {
