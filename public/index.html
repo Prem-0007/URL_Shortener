@@ -86,12 +86,19 @@
   }
 
   .short-link {
-    text-decoration: none;
-    font-weight: 600;
-    color: #333;
-    word-break: break-all;
-  }
+  text-decoration: none;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 20px;
+  background: #f0f0f0;
+  color: #111;
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+  transition: 0.2s;
+}
 
+.short-link:hover {
+  box-shadow: inset 6px 6px 12px #c5c5c5, inset -6px -6px 12px #ffffff;
+}
   .short-card button {
     padding: 6px 12px;
     border: none;
