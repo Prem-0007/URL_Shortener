@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
 
 <style>
-  /* Base styles */
+  
   body {
     margin: 0;
     font-family: 'Poppins', sans-serif;
@@ -92,7 +92,7 @@
     transition: 0.3s;
   }
 
-  /* Dark mode */
+  
   body.dark {
     background: #1a1c2c;
     color: white;
@@ -111,7 +111,7 @@
     color: #00ffff;
   }
 
-  /* Responsive */
+
   @media (max-width: 480px) {
     .heading { font-size: 1.5rem; }
     .search-box input, .search-box button { width: 100%; }
@@ -135,30 +135,36 @@
 </div>
 
 <script>
-  function toggleDark() {
-    document.body.classList.toggle("dark");
+async function shortenUrl() {
+  const originalUrl = document.getElementById("urlInput").value;
+  const resultDiv = document.getElementById("result");
+
+  if (!originalUrl) {
+    resultDiv.innerHTML = "<div class='result-card error'>Enter a URL!</div>";
+    return;
   }
 
-  async function shortenUrl() {
-    const originalUrl = document.getElementById("urlInput").value;
-    if(!originalUrl) return alert("Enter a URL!");
-
+  try {
     const response = await fetch("/shorten", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ originalUrl })
     });
 
-    const data = await response.json();
+    if (!response.ok) throw new Error("Failed to shorten URL");
 
-    const resultDiv = document.getElementById("result");
+    const data = await response.json();
+    if (!data.shortUrl) throw new Error("No short URL returned");
+
     resultDiv.innerHTML = `
       <div class="result-card">
         <a href="${data.shortUrl}" target="_blank">${data.shortUrl}</a>
       </div>
     `;
+  } catch (err) {
+    resultDiv.innerHTML = `<div class="result-card error">${err.message}</div>`;
   }
+}
 </script>
-
 </body>
 </html>
